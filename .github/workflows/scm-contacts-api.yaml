@@ -6,10 +6,10 @@ on:
 env:
   resourceGroupName: SCM-GITHUB-ACTION-COMMON-RG
   applicationInsightsName: scm-contacts-insights
-  cosmosDbAccountName: scm-contacts-cosmos-db
   serviceBusNamespaceName: scm-shared-service-bus
+  AZURE_WEBAPP_NAME: scm-contacts-api-github
 jobs:
-  arm-template:
+  extract-arm-template:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,9 +36,9 @@ jobs:
           path: day4/apps/dotnetcore/Scm/build
           if-no-files-found: error
           retention-days: 90
-  deploy:
+  deploy-arm-template:
     runs-on: ubuntu-latest
-    needs: [arm-template, build]
+    needs: [extract-arm-template]
     steps:
       - name: Download the arm template
         uses: actions/download-artifact@v2
@@ -52,6 +52,21 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.resourceGroupName }}
-          template: scm-common.json
+          template: scm-api-dotnetcore.json
           deploymentMode: Incremental
           parameters: applicationInsightsName=${{ env.applicationInsightsName }} serviceBusNamespaceName=${{ env.serviceBusNamespaceName }}
+  deploy-webapp:
+    runs-on: ubuntu-latest
+    needs: [deploy-arm-template]
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
