@@ -57,7 +57,7 @@ jobs:
           parameters: applicationInsightsName=${{ env.applicationInsightsName }} serviceBusNamespaceName=${{ env.serviceBusNamespaceName }}
   deploy-webapp:
     runs-on: ubuntu-latest
-    needs: [deploy-arm-template]
+    needs: [build, deploy-arm-template]
     steps:
       - name: Download the arm template
         uses: actions/download-artifact@v2
