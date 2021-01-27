@@ -59,16 +59,7 @@ jobs:
           resourceGroupName: ${{ env.resourceGroupName }}
           template: scm-api-dotnetcore.json
           deploymentMode: Incremental
-          parameters: | 
-            applicationInsightsName=${{ env.applicationInsightsName }}
-            serviceBusNamespaceName=${{ env.serviceBusNamespaceName }}
-            alwaysOn=False
-            sqlDatabaseName=scm-contacts-db
-            sqlServerName=scm-contacts
-            sqlPassword=${{ secrets.SQL_PASSWORD }}
-            sqlUserName=${{ secrets.SQL_USERNAME }}
-            use32bitworker=False
-            webAppName=${{ env.AZURE_WEBAPP_NAME }}
+          parameters: applicationInsightsName=${{ env.applicationInsightsName }} serviceBusNamespaceName=${{ env.serviceBusNamespaceName }} alwaysOn=False sqlDatabaseName=scm-contacts-db sqlServerName=scm-contacts sqlPassword=${{ secrets.SQL_PASSWORD }} sqlUserName=${{ secrets.SQL_USERNAME }} use32bitworker=False webAppName=${{ env.AZURE_WEBAPP_NAME }}
   deploy-webapp:
     runs-on: ubuntu-latest
     needs: [build, deploy-arm-template]
