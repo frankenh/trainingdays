@@ -65,8 +65,8 @@ jobs:
             alwaysOn=False
             sqlDatabaseName=scm-contacts-db
             sqlServerName=scm-contacts
-            sqlPassword=${{ secret.SQL_PASSWORD }}
-            sqlUserName=${{ secret.SQL_USERNAME }}
+            sqlPassword=${{ secrets.SQL_PASSWORD }}
+            sqlUserName=${{ secrets.SQL_USERNAME }}
             use32bitworker=False
             webAppName=${{ env.AZURE_WEBAPP_NAME }}
   deploy-webapp:
