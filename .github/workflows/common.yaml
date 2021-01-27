@@ -9,6 +9,7 @@ env:
   applicationInsightsName: scm-contacts-insights
   cosmosDbAccountName: scm-contacts-cosmos-db
   serviceBusNamespaceName: scm-shared-service-bus
+  location: WestEurope
 jobs:
   arm-template:
     runs-on: ubuntu-latest
@@ -33,7 +34,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Create resource group
-        run: az group create -l WestEurope -n ${{ env.resourceGroupName }}
+        run: az group create -l ${{ env.location }} -n ${{ env.resourceGroupName }}
       - name: Deploy Azure Resource Manager (ARM) Template
         uses: Azure/arm-deploy@v1
         with:
