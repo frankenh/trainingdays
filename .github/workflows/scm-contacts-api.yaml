@@ -72,6 +72,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Azure WebApp
-        uses: waeltken/webapps-deploy@v2
+        uses: waeltken/webapps-deploy@add-kind-api
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
