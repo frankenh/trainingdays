@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: npm install, build, and test
-        working-directory: /day4/apps/frontend/scmfe
+        working-directory: day4/apps/frontend/scmfe
         run: |
           npm install
           npm run build --if-present
