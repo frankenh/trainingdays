@@ -11,6 +11,7 @@ on:
 env:
   NODE_VERSION: '12'
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  STORAGE_ACCOUNT_NAME: scm-contacts-frontend-static
   APPLICATION_INSIGHTS_NAME: scm-contacts-insights
   CONTACTS_ENDPOINT: https://scm-contacts-api-github.azurewebsites.net
 
