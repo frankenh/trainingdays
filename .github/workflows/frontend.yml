@@ -9,7 +9,10 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '12' # set this to the node version to use
+  NODE_VERSION: '12'
+  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
+  CONTACTS_ENDPOINT: https://scm-contacts-api-github.azurewebsites.net
 
 jobs:
   extract-arm-template:
@@ -45,3 +48,22 @@ jobs:
           path: day4/apps/frontend/scmfe/dist
           if-no-files-found: error
           retention-days: 90
+  deploy-arm-template:
+    runs-on: ubuntu-latest
+    needs: [extract-arm-template]
+    environment: development
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: template
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: scm-fe.json
+          deploymentMode: Incremental
