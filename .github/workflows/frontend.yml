@@ -68,3 +68,6 @@ jobs:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: scm-fe.json
           deploymentMode: Incremental
+          parameters: storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
+      - name: Enable static website hosting
+        run: az storage blob service-properties update --account-name ${{ env.STORAGE_ACCOUNT_NAME }} --static-website  --index-document index.html --404-document index.html
