@@ -1,13 +1,9 @@
-name: frontend
-
+name: Frontend
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-        - 
+    branches: [ features/github-actions ]
+  workflow_dispatch:
+  
 env:
   NODE_VERSION: '12.x'                # set this to the node version to use
 
