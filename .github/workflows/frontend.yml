@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: npm install, build, and test
-        working-directory: day4/apps/frontend/scm-fe/dist
+        working-directory: day4/apps/frontend/scm-fe
         run: |
           npm install
           npm run build --if-present
@@ -42,6 +42,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: day4/apps/frontend/scmfe/
+          path: day4/apps/frontend/scmfe/dist
           if-no-files-found: error
           retention-days: 90
