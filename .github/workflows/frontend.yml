@@ -1,0 +1,42 @@
+on:
+  release:
+    types: [created]
+
+env:
+  NODE_VERSION: '10.x'                # set this to the node version to use
+
+jobs:
+  extract-arm-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload the ARM Template as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: template
+          path: day4/apps/infrastructure/templates/scm-fe.json
+          if-no-files-found: error
+          retention-days: 90
+  build:
+    name: Build Vue.js static website
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: npm install, build, and test
+      working-directory: day4/apps/frontend/scm-fe/dist
+      run: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+    - name: Upload the ARM Template as build artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: day4/apps/frontend/scmfe/
+        if-no-files-found: error
+        retention-days: 90
+  
