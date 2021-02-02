@@ -3,14 +3,14 @@ on:
   push:
     branches: [features/github-actions]
     paths:
-      - '.github/workflows/scm-contacts-api.yml'
+      - '.github/workflows/scm-contacts-api.yaml'
       - 'day4/apps/infrastructure/templates/scm-api-dotnetcore.json'
       - 'day4/apps/dotnetcore/Scm'
   workflow_dispatch:
 env:
-  resourceGroupName: SCM-GITHUB-ACTION-COMMON-RG
-  applicationInsightsName: scm-contacts-insights
-  serviceBusNamespaceName: scm-shared-service-bus
+  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
+  SERVICE_BUS~NAMESPACE: scm-shared-service-bus
   AZURE_WEBAPP_NAME: scm-contacts-api-github
 jobs:
   extract-arm-template:
@@ -60,10 +60,10 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.resourceGroupName }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: scm-api-dotnetcore.json
           deploymentMode: Incremental
-          parameters: applicationInsightsName=${{ env.applicationInsightsName }} serviceBusNamespaceName=${{ env.serviceBusNamespaceName }} alwaysOn=False sqlDatabaseName=scm-contacts-db sqlServerName=scm-contacts sqlPassword=${{ secrets.SQL_PASSWORD }} sqlUserName=${{ secrets.SQL_USERNAME }} use32bitworker=False webAppName=${{ env.AZURE_WEBAPP_NAME }}
+          parameters: applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }} serviceBusNamespaceName=${{ env.SERVICE_BUS~NAMESPACE }} alwaysOn=False sqlDatabaseName=scm-contacts-db sqlServerName=scm-contacts sqlPassword=${{ secrets.SQL_PASSWORD }} sqlUserName=${{ secrets.SQL_USERNAME }} use32bitworker=False webAppName=${{ env.AZURE_WEBAPP_NAME }}
   deploy-webapp:
     runs-on: ubuntu-latest
     needs: [build, deploy-arm-template]
