@@ -100,10 +100,11 @@ jobs:
           --resource-type "microsoft.insights/components"
           --query "properties.InstrumentationKey"
           -o tsv
-      - uses: 'finnp/create-file-action@1.0.0'
+      - name: Create settings.js
+        run: echo $FILE_CONTENT > $FILE_NAME
         env:
           FILE_NAME: 'settings/settings.js'
-          FILE_DATA: | # Lines joined with newline (\n)
+          FILE_CONTENT: | # Lines joined with newline (\n)
             var uisettings = {
               "enableStats": true,
               "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
