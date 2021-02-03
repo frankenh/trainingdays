@@ -3,7 +3,7 @@ on:
   push:
     branches: [features/github-actions]
     paths:
-      - '.github/workflows/common.yml'
+      - '.github/workflows/common.yaml'
       - 'day4/apps/infrastructure/templates/scm-common.json'
   workflow_dispatch:
 env:
