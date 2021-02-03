@@ -84,5 +84,19 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Get Application Insights Key
+        id: applications-insights-key
+        run: az resource show -g ${{ env.RESOURCE_GROUP_NAME }} -n ${{ env.APPLICATIONS_INSIGHTS_NAME }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv
+        with:
+          result-encoding: string
+      - uses: 'finnp/create-file-action@master'
+        env:
+          FILE_NAME: 'settings/settings.js'
+          FILE_DATA: '{
+            "enableStats": true,
+            "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
+            "aiKey": "${{ steps.applications-insights-key.outputs.result }}"
+          }'
+
       - name: Enable static website hosting
         run: az storage blob upload-batch -d '$web' --account-name ${{ env.STORAGE_ACCOUNT_NAME }} -s ./
