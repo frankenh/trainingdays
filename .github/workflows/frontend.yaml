@@ -92,9 +92,10 @@ jobs:
       - uses: 'finnp/create-file-action@master'
         env:
           FILE_NAME: 'settings/settings.js'
-          FILE_DATA: '{
-            "enableStats": true,
-            "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
+          FILE_DATA: |
+            {
+              "enableStats": true,
+              "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
             "aiKey": "${{ steps.applications-insights-key.outputs.result }}"
           }'
 
