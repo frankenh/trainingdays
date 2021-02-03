@@ -11,7 +11,7 @@ on:
 env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
   APPLICATION_INSIGHTS_NAME: scm-contacts-insights
-  SERVICE_BUS~NAMESPACE: scm-shared-service-bus
+  SERVICE_BUS_NAMESPACE: scm-shared-service-bus
   AZURE_WEBAPP_NAME: scm-contacts-api-github
 
 jobs:

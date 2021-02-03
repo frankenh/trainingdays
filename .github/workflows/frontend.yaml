@@ -74,10 +74,10 @@ jobs:
       - name: Enable static website hosting
         run: > # The following lines are joined by a space ( ) character
           az storage blob service-properties update
-            --account-name ${{ env.STORAGE_ACCOUNT_NAME }}
-            --static-website
-            --index-document index.html
-            --404-document index.html
+          --account-name ${{ env.STORAGE_ACCOUNT_NAME }}
+          --static-website
+          --index-document index.html
+          --404-document index.html
 
   deploy-static-website:
     runs-on: ubuntu-latest
@@ -95,12 +95,12 @@ jobs:
         id: applications-insights-key
         run: > # Lines are joined by spaces
           az resource show
-            -g ${{ env.RESOURCE_GROUP_NAME }}
-            -n ${{ env.APPLICATION_INSIGHTS_NAME }}
-            --resource-type "microsoft.insights/components"
-            --query "properties.InstrumentationKey"
-            -o tsv
-      - uses: 'finnp/create-file-action@master'
+          -g ${{ env.RESOURCE_GROUP_NAME }}
+          -n ${{ env.APPLICATION_INSIGHTS_NAME }}
+          --resource-type "microsoft.insights/components"
+          --query "properties.InstrumentationKey"
+          -o tsv
+      - uses: 'finnp/create-file-action@1.0.0'
         env:
           FILE_NAME: 'settings/settings.js'
           FILE_DATA: | # Lines joined with newline (\n)
@@ -113,6 +113,6 @@ jobs:
       - name: Enable static website hosting
         run: >
           az storage blob upload-batch
-            -s ./
-            -d '$web'
-            --account-name ${{ env.STORAGE_ACCOUNT_NAME }}
+          -s ./
+          -d '$web'
+          --account-name ${{ env.STORAGE_ACCOUNT_NAME }}
