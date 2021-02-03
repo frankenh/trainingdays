@@ -91,7 +91,7 @@ jobs:
         env:
           FILE_NAME: 'settings/settings.js'
           FILE_DATA: |
-            {
+            var uisettings = {
               "enableStats": true,
               "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
               "aiKey": "${{ steps.applications-insights-key.outputs.result }}"
