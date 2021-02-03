@@ -44,4 +44,7 @@ jobs:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: scm-common.json
           deploymentMode: Incremental
-          parameters: applicationInsightsName=${{ env.APPLICATIONS_INSIGHTS_NAME }} cosmosDbAccountName=${{ env.COSMOS_DB_ACCOUNT_NAME }} serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
+          parameters: >
+            applicationInsightsName=${{ env.APPLICATIONS_INSIGHTS_NAME }}
+            cosmosDbAccountName=${{ env.COSMOS_DB_ACCOUNT_NAME }}
+            serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
