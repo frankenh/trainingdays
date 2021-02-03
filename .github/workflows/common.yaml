@@ -3,8 +3,8 @@ on:
   push:
     branches: [features/github-actions]
     paths:
-      - '.github/workflows/common.yaml'
-      - 'day4/apps/infrastructure/templates/scm-common.json'
+      - .github/workflows/common.yaml
+      - day4/apps/infrastructure/templates/scm-common.json
   workflow_dispatch:
 env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG

@@ -3,9 +3,9 @@ on:
   push:
     branches: [features/github-actions]
     paths:
-      - '.github/workflows/scm-contacts-api.yaml'
-      - 'day4/apps/infrastructure/templates/scm-api-dotnetcore.json'
-      - 'day4/apps/dotnetcore/Scm'
+      - .github/workflows/scm-contacts-api.yaml
+      - day4/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day4/apps/dotnetcore/Scm/**
   workflow_dispatch:
 env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
