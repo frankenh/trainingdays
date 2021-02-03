@@ -86,7 +86,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Get Application Insights Key
         id: applications-insights-key
-        run: az resource show -g ${{ env.RESOURCE_GROUP_NAME }} -n ${{ env.APPLICATIONS_INSIGHTS_NAME }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv
+        run: az resource show -g ${{ env.RESOURCE_GROUP_NAME }} -n ${{ env.APPLICATION_INSIGHTS_NAME }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv
       - uses: 'finnp/create-file-action@master'
         env:
           FILE_NAME: 'settings/settings.js'
