@@ -36,7 +36,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Create resource group
-        run: az group create -l ${{ env.location }} -n ${{ env.RESOURCE_GROUP_NAME }}
+        run: az group create -l ${{ env.LOCATION }} -n ${{ env.RESOURCE_GROUP_NAME }}
       - name: Deploy Azure Resource Manager (ARM) Template
         uses: Azure/arm-deploy@v1
         with:
