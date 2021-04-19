@@ -4,7 +4,7 @@ on:
     branches: [features/github-actions]
     paths:
       - .github/workflows/resources-api.yaml
-      - day4/apps/infrastructure/templates/scm--resources-api-dotnetcore.json
+      - day4/apps/infrastructure/templates/scm-resources-api-dotnetcore.json
       - day4/apps/dotnetcore/Scm/**
   workflow_dispatch:
 
@@ -12,8 +12,8 @@ env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
   APPLICATION_INSIGHTS_NAME: scm-contacts-insights
   SERVICE_BUS_NAMESPACE: scm-shared-service-bus
-  AZURE_WEBAPP_NAME: scm-resources-api-github
-  STORAGE_ACCOUNT_NAME: scm-contact-images
+  AZURE_WEBAPP_NAME: scm-contacts-api-github
+  FUNCTION_APP_NAME: scm-contacts-resizer
 
 jobs:
   extract-arm-template:
@@ -28,7 +28,7 @@ jobs:
           if-no-files-found: error
           retention-days: 90
 
-  build:
+  build-api:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,12 +37,34 @@ jobs:
           # SDK Version to use; x will use the latest version of the 3.1 channel
           dotnet-version: '3.1.x'
       - name: dotnet build and publish
-        working-directory: day4/apps/dotnetcore/Scm.Resources
+        working-directory: day4/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api
         run: |
           dotnet restore
           dotnet build --configuration Release
           dotnet publish -c Release -o build
-      - name: upload ARM Template as build artifact
+      - name: Upload as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: resources-build
+          path: day4/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/build
+          if-no-files-found: error
+          retention-days: 90
+
+  build-resizer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          # SDK Version to use; x will use the latest version of the 3.1 channel
+          dotnet-version: '3.1.x'
+      - name: dotnet build and publish
+        working-directory: day4/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o build
+      - name: Upload as build artifact
         uses: actions/upload-artifact@v2
         with:
           name: build
@@ -74,17 +96,13 @@ jobs:
             serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
             alwaysOn=False
             use32bitworker=False
-            sqlDatabaseName=scm-contacts-db
-            sqlServerName=scm-contacts
-            sqlPassword=${{ secrets.SQL_PASSWORD }}
-            sqlUserName=${{ secrets.SQL_USERNAME }}
             webAppName=${{ env.AZURE_WEBAPP_NAME }}
             storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
             functionAppName=${{ env.FUNCTION_APP_NAME }}
 
-  deploy-webapp:
+  deploy-api:
     runs-on: ubuntu-latest
-    needs: [build, deploy-arm-template]
+    needs: [build-api, deploy-arm-template]
     steps:
       - name: Download the arm template
         uses: actions/download-artifact@v2
@@ -97,3 +115,15 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+
+  deploy-resizer:
+    runs-on: ubuntu-latest
+    needs: [build-resizer, deploy-arm-template]
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
