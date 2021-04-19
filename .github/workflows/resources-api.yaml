@@ -12,7 +12,7 @@ env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
   APPLICATION_INSIGHTS_NAME: scm-contacts-insights
   SERVICE_BUS_NAMESPACE: scm-shared-service-bus
-  AZURE_WEBAPP_NAME: scm-contacts-api-github
+  AZURE_WEBAPP_NAME: scm-resources-api-github
   STORAGE_ACCOUNT_NAME: scmcontactimages
   FUNCTION_APP_NAME: scm-contacts-resizer
 
