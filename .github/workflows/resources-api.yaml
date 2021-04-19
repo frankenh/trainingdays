@@ -1,10 +1,10 @@
-name: Contacts API
+name: Resources API
 on:
   push:
     branches: [features/github-actions]
     paths:
-      - .github/workflows/scm-contacts-api.yaml
-      - day4/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - .github/workflows/resources-api.yaml
+      - day4/apps/infrastructure/templates/scm--resources-api-dotnetcore.json
       - day4/apps/dotnetcore/Scm/**
   workflow_dispatch:
 
@@ -12,7 +12,8 @@ env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
   APPLICATION_INSIGHTS_NAME: scm-contacts-insights
   SERVICE_BUS_NAMESPACE: scm-shared-service-bus
-  AZURE_WEBAPP_NAME: scm-contacts-api-github
+  AZURE_WEBAPP_NAME: scm-resources-api-github
+  STORAGE_ACCOUNT_NAME: scm-contact-images
 
 jobs:
   extract-arm-template:
@@ -23,7 +24,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: template
-          path: day4/apps/infrastructure/templates/scm-api-dotnetcore.json
+          path: day4/apps/infrastructure/templates/scm-resources-api-dotnetcore.json
           if-no-files-found: error
           retention-days: 90
 
@@ -36,7 +37,7 @@ jobs:
           # SDK Version to use; x will use the latest version of the 3.1 channel
           dotnet-version: '3.1.x'
       - name: dotnet build and publish
-        working-directory: day4/apps/dotnetcore/Scm
+        working-directory: day4/apps/dotnetcore/Scm.Resources
         run: |
           dotnet restore
           dotnet build --configuration Release
@@ -45,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: day4/apps/dotnetcore/Scm/build
+          path: day4/apps/dotnetcore/Scm.Resources/build
           if-no-files-found: error
           retention-days: 90
 
@@ -66,7 +67,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: scm-api-dotnetcore.json
+          template: scm-resources-api-dotnetcore.json
           deploymentMode: Incremental
           parameters: > # Lines are joined with spaces
             applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }}
@@ -78,6 +79,8 @@ jobs:
             sqlPassword=${{ secrets.SQL_PASSWORD }}
             sqlUserName=${{ secrets.SQL_USERNAME }}
             webAppName=${{ env.AZURE_WEBAPP_NAME }}
+            storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
+            functionAppName=${{ env.FUNCTION_APP_NAME }}
 
   deploy-webapp:
     runs-on: ubuntu-latest
