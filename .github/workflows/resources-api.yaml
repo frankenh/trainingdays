@@ -13,6 +13,7 @@ env:
   APPLICATION_INSIGHTS_NAME: scm-contacts-insights
   SERVICE_BUS_NAMESPACE: scm-shared-service-bus
   AZURE_WEBAPP_NAME: scm-contacts-api-github
+  STORAGE_ACCOUNT_NAME: scm-contact-images
   FUNCTION_APP_NAME: scm-contacts-resizer
 
 jobs:
