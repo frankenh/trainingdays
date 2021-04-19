@@ -68,7 +68,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: day4/apps/dotnetcore/Scm.Resources/build
+          path: day4/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/build
           if-no-files-found: error
           retention-days: 90
 
