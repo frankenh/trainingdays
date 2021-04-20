@@ -94,13 +94,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Get Application Insights Key
         id: applications-insights-key
-        run: > # Lines are joined by spaces
-          az resource show
-          -g ${{ env.RESOURCE_GROUP_NAME }}
-          -n ${{ env.APPLICATION_INSIGHTS_NAME }}
-          --resource-type "microsoft.insights/components"
-          --query "properties.InstrumentationKey"
-          -o tsv
+        run: echo "::set-output name=id::$(az resource show -g ${{ env.RESOURCE_GROUP_NAME }} -n ${{ env.APPLICATION_INSIGHTS_NAME }} --resource-type 'microsoft.insights/components' --query 'properties.InstrumentationKey' -o tsv)"
       - name: Create settings.js
         run: echo $FILE_CONTENT > $FILE_NAME
         env:
@@ -110,7 +104,7 @@ jobs:
               "enableStats": true,
               "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
               "resourcesEndpoint": "${{ env.RESOURCES_ENDPOINT }}",
-              "aiKey": "${{ steps.applications-insights-key.outputs }}"
+              "aiKey": "${{ steps.applications-insights-key.outputs.id }}"
             }
 
       - name: Enable static website hosting
