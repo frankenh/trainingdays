@@ -94,7 +94,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Get Application Insights Key
         id: insights
-        uses: waeltken/get-application-insights-key-action@v1
+        uses: waeltken/get-application-insights-key-action@v1-rc1
         with:
           resource-group-name: ${{ env.RESOURCE_GROUP_NAME }}
           application-insights-name: ${{ env.APPLICATION_INSIGHTS_NAME }}
