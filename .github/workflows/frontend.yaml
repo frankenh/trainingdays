@@ -110,7 +110,7 @@ jobs:
               "enableStats": true,
               "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
               "resourcesEndpoint": "${{ env.RESOURCES_ENDPOINT }}",
-              "aiKey": "${{ steps.applications-insights-key.outputs.result }}"
+              "aiKey": "${{ steps.applications-insights-key.outputs }}"
             }
 
       - name: Enable static website hosting
