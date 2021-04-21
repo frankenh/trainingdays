@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: '12'
       - name: npm install, build, and test
-        working-directory: /day3/apps/nodejs/visitreport
+        working-directory: day3/apps/nodejs/visitreport
         run: | # The following lines are joined by a newline (\n) character
           npm install
           npm run build --if-present
@@ -50,6 +50,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: /day3/apps/nodejs/visitreport
+          path: day3/apps/nodejs/visitreport
           if-no-files-found: error
           retention-days: 90
