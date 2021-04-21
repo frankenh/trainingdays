@@ -105,3 +105,21 @@ jobs:
             applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }}
             serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
             commonResGroup=${{ env.RESOURCE_GROUP_NAME }}
+
+  deploy-api:
+    runs-on: ubuntu-latest
+    needs:
+      - deploy-db-template
+      - deploy-infra-template
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure WebApp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.RESOURCES_APP_NAME }}
