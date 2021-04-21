@@ -5,7 +5,6 @@ on:
     paths:
       - .github/workflows/common.yaml
       - day4/apps/infrastructure/templates/scm-common.json
-  workflow_dispatch:
 
 env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
@@ -29,7 +28,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [arm-template]
+    needs: arm-template
     steps:
       - name: Download the arm template
         uses: actions/download-artifact@v2
