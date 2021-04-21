@@ -111,8 +111,9 @@ jobs:
     needs:
       - deploy-db-template
       - deploy-infra-template
+      - build
     steps:
-      - name: Download the arm template
+      - name: Download the build artifact
         uses: actions/download-artifact@v2
         with:
           name: build
