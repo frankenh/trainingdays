@@ -32,3 +32,24 @@ jobs:
           path: day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
           if-no-files-found: error
           retention-days: 90
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: npm install, build, and test
+        working-directory: /day3/apps/nodejs/visitreport
+        run: | # The following lines are joined by a newline (\n) character
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+      - name: Upload the visitreport app with node dependencies as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: /day3/apps/nodejs/visitreport
+          if-no-files-found: error
+          retention-days: 90
