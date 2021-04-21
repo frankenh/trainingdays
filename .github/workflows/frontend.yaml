@@ -93,12 +93,10 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Get Application Insights Key
-        uses: waeltken/get-application-insights-key-action@main
+        uses: waeltken/get-application-insights-key-action@v1
         with:
           resource-group-name: ${{ env.RESOURCE_GROUP_NAME }}
           application-insights-name: ${{ env.APPLICATION_INSIGHTS_NAME }}
-      - name: try echo
-        run: echo $APPLICATION_INSIGHTS_KEY
       - name: Create settings.js
         run: echo $FILE_CONTENT > $FILE_NAME
         env:
