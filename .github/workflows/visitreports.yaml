@@ -113,7 +113,6 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Azure WebApp
         uses: azure/webapps-deploy@v2
-        env:
-          AZURE_WEBAPP_PACKAGE_PATH: day4/apps/nodejs/visitreport
         with:
           app-name: ${{ env.RESOURCES_APP_NAME }}
+          package: day4/apps/nodejs/visitreport
