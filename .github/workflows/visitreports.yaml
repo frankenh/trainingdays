@@ -1,4 +1,4 @@
-name: Resources API
+name: Visitreports API
 on:
   push:
     branches: [features/github-actions]
@@ -12,6 +12,7 @@ env:
   RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
   APPLICATION_INSIGHTS_NAME: scm-contacts-insights
   SERVICE_BUS_NAMESPACE: scm-shared-service-bus
+  RESOURCES_APP_NAME: scm-visitreport-api-github
   COSMOS_DB_ACCOUNT_NAME: scm-contacts-cosmos-db
   COSMOS_DATABASE_NAME: scmvisitreports
   COSMOS_DATABASE_CONTAINER_NAME: visitreports
@@ -79,3 +80,28 @@ jobs:
             cosmosDbAccount=${{ env.COSMOS_DB_ACCOUNT_NAME }}
             cosmosDatabaseName=${{ env.COSMOS_DATABASE_NAME }}
             cosmosDatabaseContainerName=${{ env.COSMOS_DATABASE_CONTAINER_NAME }}
+
+  deploy-infra-template:
+    runs-on: ubuntu-latest
+    needs: extract-arm-templates
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: infra-template
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: scm-visitreport-nodejs-infra.json
+          deploymentMode: Incremental
+          parameters: >
+            cosmosDbAccount=${{ env.COSMOS_DB_ACCOUNT_NAME }}
+            webAppName=${{ env.RESOURCES_APP_NAME }} 
+            applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }}
+            serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
+            commonResGroup=${{ env.RESOURCE_GROUP_NAME }}
