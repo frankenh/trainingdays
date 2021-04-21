@@ -96,14 +96,14 @@ jobs:
         name: Cache npm dependencies to speed up deployment
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('day3/apps/nodejs/visitreport/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('day4/apps/nodejs/visitreport/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - uses: actions/setup-node@v2
         with:
           node-version: '12'
       - name: npm install, build, and test
-        working-directory: day3/apps/nodejs/visitreport
+        working-directory: day4/apps/nodejs/visitreport
         run: | # The following lines are joined by a newline (\n) character
           npm install
           npm run build --if-present
@@ -114,6 +114,6 @@ jobs:
       - name: Azure WebApp
         uses: azure/webapps-deploy@v2
         env:
-          AZURE_WEBAPP_PACKAGE_PATH: day3/apps/nodejs/visitreport
+          AZURE_WEBAPP_PACKAGE_PATH: day4/apps/nodejs/visitreport
         with:
           app-name: ${{ env.RESOURCES_APP_NAME }}
