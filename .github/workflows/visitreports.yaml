@@ -1,0 +1,34 @@
+name: Resources API
+on:
+  push:
+    branches: [features/github-actions]
+    paths:
+      - .github/workflows/visitreports.yaml
+      - day4/apps/nodejs/visitreport/*
+      - day4/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
+      - day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
+
+env:
+  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
+  SERVICE_BUS_NAMESPACE: scm-shared-service-bus
+
+jobs:
+  extract-arm-templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload the ARM Template as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: db-template
+          path: day4/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Upload the ARM Template as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: infra-template
+          path: day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
+          if-no-files-found: error
+          retention-days: 90
