@@ -37,27 +37,6 @@ jobs:
           if-no-files-found: error
           retention-days: 90
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '12'
-      - name: npm install, build, and test
-        working-directory: day3/apps/nodejs/visitreport
-        run: | # The following lines are joined by a newline (\n) character
-          npm install
-          npm run build --if-present
-          npm run test --if-present
-      - name: Upload the visitreport app with node dependencies as build artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: day3/apps/nodejs/visitreport
-          if-no-files-found: error
-          retention-days: 90
-
   deploy-db-template:
     runs-on: ubuntu-latest
     needs: extract-arm-templates
@@ -106,21 +85,35 @@ jobs:
             serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
             commonResGroup=${{ env.RESOURCE_GROUP_NAME }}
 
-  deploy-api:
+  build-and-deploy-api:
     runs-on: ubuntu-latest
     needs:
       - deploy-db-template
       - deploy-infra-template
-      - build
     steps:
-      - name: Download the build artifact
-        uses: actions/download-artifact@v2
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        name: Cache npm dependencies to speed up deployment
         with:
-          name: build
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('day3/apps/nodejs/visitreport/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: npm install, build, and test
+        working-directory: day3/apps/nodejs/visitreport
+        run: | # The following lines are joined by a newline (\n) character
+          npm install
+          npm run build --if-present
+          npm run test --if-present
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Azure WebApp
         uses: azure/webapps-deploy@v2
+        env:
+          AZURE_WEBAPP_PACKAGE_PATH: day3/apps/nodejs/visitreport
         with:
           app-name: ${{ env.RESOURCES_APP_NAME }}
