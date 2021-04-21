@@ -97,6 +97,8 @@ jobs:
         with:
           resource-group-name: ${{ env.RESOURCE_GROUP_NAME }}
           application-insights-name: ${{ env.APPLICATION_INSIGHTS_NAME }}
+      - name: try echo
+        run: echo $APPLICATION_INSIGHTS_KEY
       - name: Create settings.js
         run: echo $FILE_CONTENT > $FILE_NAME
         env:
