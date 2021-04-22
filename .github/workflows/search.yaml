@@ -14,6 +14,7 @@ env:
   SERVICE_BUS_NAMESPACE: scm-shared-service-bus
   SEARCH_APP_NAME: scm-search-api-github
   FUNCTION_APP_NAME: scm-search-function-github
+  STORAGE_ACCOUNT_NAME: scmsearchstorage
   SEARCH_SERVICE_NAME: scm-contacts-search
 
 jobs:
