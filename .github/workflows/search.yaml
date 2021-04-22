@@ -55,3 +55,47 @@ jobs:
             applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }} 
             serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
             azureSearchServiceName=${{ env.SEARCH_SERVICE_NAME }}
+
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          # SDK Version to use; x will use the latest version of the 3.1 channel
+          dotnet-version: '3.1.x'
+      - name: dotnet build and publish
+        working-directory: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o build
+      - name: Upload as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-build
+          path: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/build
+          if-no-files-found: error
+          retention-days: 90
+
+  build-indexer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          # SDK Version to use; x will use the latest version of the 3.1 channel
+          dotnet-version: '3.1.x'
+      - name: dotnet build and publish
+        working-directory: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o build
+      - name: Upload as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: indexer-build
+          path: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/build
+          if-no-files-found: error
+          retention-days: 90
