@@ -12,7 +12,8 @@
             "type": "string"
         },
         "tatier": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "F0"
         }
     },
     "variables": {
