@@ -4,7 +4,7 @@
     "parameters": {
         "appPlanSKU": {
             "type": "string",
-            "defaultValue": "B1",
+            "defaultValue": "S1",
             "metadata": {
                 "description": "The SKU of App Service Plan, default is S1"
             }
@@ -54,7 +54,7 @@
         },
         "azureSearchSKU": {
             "type": "string",
-            "defaultValue": "Standard",
+            "defaultValue": "standard",
             "allowedValues": [
                 "free",
                 "basic",
