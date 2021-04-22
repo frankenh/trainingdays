@@ -20,13 +20,15 @@
             "type": "bool",
             "metadata": {
                 "description": "Use 32bit worker process or not. Some App Service Plan SKUs does only allow 32bit e.g. D1"
-            }
+            },
+            "defaultValue": false
         },
         "alwaysOn": {
             "type": "bool",
             "metadata": {
                 "description": "Use alwaysOn for the App Service Pan or not? Some App Service Plan SKUs does not support it e.g. D1"
-            }
+            },
+            "defaultValue": false
         },
         "storageAccountName": {
             "type": "string",
