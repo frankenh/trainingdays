@@ -29,6 +29,20 @@
         },
         "taname": {
             "type": "string"
+        },
+        "sku": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "metadata": {
+                "description": "The SKU of App Service Plan, default is Standard"
+            }
+        },
+        "skuCode": {
+            "type": "string",
+            "defaultValue": "S1",
+            "metadata": {
+                "description": "The SKU of App Service Plan, default is S1"
+            }
         }
     },
     "variables": {
@@ -48,14 +62,13 @@
             "name": "[variables('consumpltionPlanName')]",
             "location": "[variables('location')]",
             "kind": "linux",
-            "sku": {
-                "name": "Y1",
-                "tier": "Dynamic"
-            },
             "properties": {
                 "name": "[variables('consumpltionPlanName')]",
-                "computeMode": "Dynamic",
                 "reserved": true
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
             }
         },
         {
