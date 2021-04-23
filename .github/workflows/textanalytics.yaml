@@ -18,33 +18,26 @@ env:
   COSMOS_DB_ACCOUNT_NAME: scm-contacts-cosmos-db
 
 jobs:
-  extract-arm-templates:
+  extract-arm-template:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Upload the ARM Template as build artifact
         uses: actions/upload-artifact@v2
         with:
-          name: common-template
-          path: day4/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json
-          if-no-files-found: error
-          retention-days: 90
-      - name: Upload the ARM Template as build artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: infra-template
-          path: day4/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json
+          name: template
+          path: day4/apps/infrastructure/templates/scm-textanalytics.json
           if-no-files-found: error
           retention-days: 90
 
-  deploy-common-template:
+  deploy-template:
     runs-on: ubuntu-latest
-    needs: extract-arm-templates
+    needs: extract-arm-template
     steps:
       - name: Download the arm template
         uses: actions/download-artifact@v2
         with:
-          name: common-template
+          name: template
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -53,33 +46,11 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: scm-textanalytics-nodejs-common.json
-          deploymentMode: Incremental
-          parameters: >
-            taname=${{ env.COGNITIVE_SERVICE_NAME }}
-            storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
-
-  deploy-infra-template:
-    runs-on: ubuntu-latest
-    needs: extract-arm-templates
-    steps:
-      - name: Download the arm template
-        uses: actions/download-artifact@v2
-        with:
-          name: infra-template
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Deploy Azure Resource Manager (ARM) Template
-        uses: Azure/arm-deploy@v1
-        with:
-          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: scm-textanalytics-nodejs-infra.json
+          template: scm-textanalytics.json
           deploymentMode: Incremental
           parameters: >
             functionAppName=${{ env.FUNCTION_APP_NAME }}
-            storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }} 
+            storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
             applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }}
             cosmosDbAccount=${{ env.COSMOS_DB_ACCOUNT_NAME }}
             serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
@@ -89,8 +60,7 @@ jobs:
   build-and-deploy-api:
     runs-on: ubuntu-latest
     needs:
-      - deploy-common-template
-      - deploy-infra-template
+      - deploy-template
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
