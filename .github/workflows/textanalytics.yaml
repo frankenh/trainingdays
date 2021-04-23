@@ -75,7 +75,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: scm-visitreport-nodejs-infra.json
+          template: scm-textanalytics-nodejs-infra.json
           deploymentMode: Incremental
           parameters: >
             functionAppName=${{ env.FUNCTION_APP_NAME }}
