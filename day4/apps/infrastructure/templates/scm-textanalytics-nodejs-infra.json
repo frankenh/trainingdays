@@ -34,7 +34,7 @@
     "variables": {
         "taFunctionName": "[parameters('functionAppName')]",
         "taEndpoint": "[concat('https://', parameters('taname'), '.cognitiveservices.azure.com')]",
-        "consumpltionPlanName": "[concat(parameters('functionAppName'), '-plan')]",
+        "consumpltionPlanName": "linux-function-plan",
         "location": "[resourceGroup().location]",
         "sbVersion": "2017-04-01",
         "sbScmVisitReportTopicListenAuthRule": "scmvrtopiclisten",
